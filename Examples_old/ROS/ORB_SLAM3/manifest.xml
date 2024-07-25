@@ -5,6 +5,7 @@
   <author>Carlos Campos, Richard Elvira, Juan J. Gomez, Jose M.M. Montiel, Juan D. Tardos</author>
   <license>GPLv3</license>
   <depend package="roscpp"/>
+  <!-- <depend package="roslib"/> -->
   <depend package="tf"/>
   <depend package="sensor_msgs"/>
   <depend package="image_transport"/>
