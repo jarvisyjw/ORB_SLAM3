@@ -4,6 +4,7 @@
 
 First of all, if you are using anaconda to manage your python environment, please be careful, there might be fuzzy bugs. The vanilla ORB_SLAM3 can successfully complied by the original python environment came with the Ubuntu20.04.
 
+# Installation
 ## Step1: Install Pangolin
 ```bash
 # Get Pangolin
@@ -125,3 +126,5 @@ chmod +x build_ros.sh
   
   - [This fork](https://github.com/shashankyld/orbslam3_ROS.git) provide docker support. I might look into it later.
   - [This fork](https://github.com/shanpenghui/ORB_SLAM3_Fixed.git) provides detailed tutorial of runnning on cutomized sensors.
+
+# Running Experiments

@@ -45,20 +45,47 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "Mono");
     ros::start();
+    ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
 
-    if(argc != 3)
+    // if(argc != 3)
+    // {
+    //     cerr << endl << "Usage: rosrun ORB_SLAM3 Mono path_to_vocabulary path_to_settings" << endl;        
+    //     ros::shutdown();
+    //     return 1;
+    // }
+
+    ros::NodeHandle nodeHandler;
+    std::string voc_file, settings_file, kf_traj_file;
+
+    // Read voc_file and settings_file from launch file
+    if (nodeHandler.getParam("/voc_file", voc_file) && nodeHandler.getParam("/settings_file", settings_file))
+    {   
+        ROS_INFO("Got voc_file: %s", voc_file.c_str());
+        ROS_INFO("Got settings_file: %s", settings_file.c_str());
+    }
+    else
     {
-        cerr << endl << "Usage: rosrun ORB_SLAM3 Mono path_to_vocabulary path_to_settings" << endl;        
+        ROS_ERROR("Please provide voc_file and settings_file in the launch file");
         ros::shutdown();
         return 1;
-    }    
+    }
+    // Read traj_file from launch file
+    if (nodeHandler.getParam("/kf_traj_file", kf_traj_file))
+    {
+        ROS_INFO("Got kf_traj_file: %s", kf_traj_file.c_str());
+    }
+    else
+    {
+        ROS_WARN("traj_file not provided. Using default: KeyFrameTrajectory.txt");
+        kf_traj_file = "KeyFrameTrajectory.txt";
+    }
 
+    
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true);
+    ORB_SLAM3::System SLAM(voc_file, settings_file, ORB_SLAM3::System::MONOCULAR, true);
 
     ImageGrabber igb(&SLAM);
 
-    ros::NodeHandle nodeHandler;
     ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
 
     ros::spin();
@@ -66,8 +93,9 @@ int main(int argc, char **argv)
     // Stop all threads
     SLAM.Shutdown();
 
+    // Save keyframe trajectory
+    SLAM.SaveKeyFrameTrajectoryTUM(kf_traj_file);
     // Save camera trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
     ros::shutdown();
 
