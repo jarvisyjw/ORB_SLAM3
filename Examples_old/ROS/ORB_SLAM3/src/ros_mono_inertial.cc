@@ -72,24 +72,57 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "Mono_Inertial");
   ros::NodeHandle n("~");
   ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
+  
+  std::string voc_file, settings_file, kf_traj_file;
   bool bEqual = false;
-  if(argc < 3 || argc > 4)
+
+  // Read voc_file and settings_file from launch file
+  if (n.getParam("/voc_file", voc_file) && n.getParam("/settings_file", settings_file))
+  {   
+      ROS_INFO("Got voc_file: %s", voc_file.c_str());
+      ROS_INFO("Got settings_file: %s", settings_file.c_str());
+  }
+  else
   {
-    cerr << endl << "Usage: rosrun ORB_SLAM3 Mono_Inertial path_to_vocabulary path_to_settings [do_equalize]" << endl;
-    ros::shutdown();
-    return 1;
+      ROS_ERROR("Please provide voc_file and settings_file in the launch file");
+      ros::shutdown();
+      return 1;
+  }
+  // Read traj_file from launch file
+  if (n.getParam("/kf_traj_file", kf_traj_file))
+  {
+      ROS_INFO("Got kf_traj_file: %s", kf_traj_file.c_str());
+  }
+  else
+  {
+      ROS_WARN("traj_file not provided. Using default: KeyFrameTrajectory.txt");
+      kf_traj_file = "KeyFrameTrajectory.txt";
+  }
+  if (n.getParam("/do_equalize", bEqual))
+  {
+      ROS_INFO("Got do_equalize: %s", bEqual ? "true" : "false");
+  }
+  else
+  {
+      ROS_WARN("do_equalize not provided. Using default: false");
   }
 
+  // if(argc < 3 || argc > 4)
+  // {
+  //   cerr << endl << "Usage: rosrun ORB_SLAM3 Mono_Inertial path_to_vocabulary path_to_settings [do_equalize]" << endl;
+  //   ros::shutdown();
+  //   return 1;
+  // }
 
-  if(argc==4)
-  {
-    std::string sbEqual(argv[3]);
-    if(sbEqual == "true")
-      bEqual = true;
-  }
+  // if(argc==4)
+  // {
+  //   std::string sbEqual(argv[3]);
+  //   if(sbEqual == "true")
+  //     bEqual = true;
+  // }
 
   // Create SLAM system. It initializes all system threads and gets ready to process frames.
-  ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR,true);
+  ORB_SLAM3::System SLAM(voc_file,settings_file,ORB_SLAM3::System::IMU_MONOCULAR,true);
 
   ImuGrabber imugb;
   ImageGrabber igb(&SLAM,&imugb,bEqual); // TODO
@@ -127,7 +160,7 @@ cv::Mat ImageGrabber::GetImage(const sensor_msgs::ImageConstPtr &img_msg)
     ROS_ERROR("cv_bridge exception: %s", e.what());
   }
   
-  if(cv_ptr->image.type()==0)
+  if(cv_ptr->image.type()==0) 
   {
     return cv_ptr->image.clone();
   }

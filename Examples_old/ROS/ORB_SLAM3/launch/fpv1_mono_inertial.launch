@@ -1,0 +1,28 @@
+<launch>
+    <!-- Specify the path to the ORB-SLAM3 vocabulary and configuration files -->
+    <arg name="voc_file" default="/home/jarvis/jw_ws/SLAM_ws/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
+        <arg name="settings_file" default="$(find ORB_SLAM3)/config/FPv1.yaml"/>
+            <arg name="kf_traj_file" default="$(find ORB_SLAM3)/output/traj/fpv1_mono_inertial_kf_traj.txt"/>
+                <arg name="bag_file" default="/home/jarvis/jw_ws/SLAM_ws/ORB_SLAM3/dataset/FPV1/20220216_escalator_day.bag" />
+
+    <!-- <param name="voc_file" value="$(arg voc_file)"/>
+    <param name="settings_file" value="$(arg settings_file)"/>
+    <param name="kf_traj_file" value="$(arg kf_traj_file)"/> -->
+    
+    <node pkg="rosbag" type="play" name="player" output="screen" args="--pause $(arg bag_file)"/>
+    
+    <node name="republish" type="republish" pkg="image_transport" output="screen" args="compressed in:=/stereo/frame_left/image_raw raw out:=/camera/image_raw" />
+
+    <!-- Launch the ORB-SLAM3 node -->
+    <node name="ORB_SLAM3" pkg="ORB_SLAM3" type="Mono_Inertial" output="screen">
+        <param name="voc_file" value="$(arg voc_file)"/>
+        <param name="settings_file" value="$(arg settings_file)"/>
+        <param name="kf_traj_file" value="$(arg kf_traj_file)"/>
+        <remap from="/imu" to="/stim300/imu/data_raw"/> 
+
+        <!-- Define the topics for the node -->
+        <!-- <remap from="/camera/image_raw" to="/stereo/frame_left/image_raw/compressed"/>  -->
+    </node>
+
+    <!-- Optionally, you can include other nodes or configurations here -->
+</launch>

@@ -1,0 +1,176 @@
+%YAML:1.0
+
+#--------------------------------------------------------------------------------------------
+# System config
+#--------------------------------------------------------------------------------------------
+
+# When the variables are commented, the system doesn't load a previous session or not store the current one
+
+# If the LoadFile doesn't exist, the system give a message and create a new Atlas from scratch
+#System.LoadAtlasFromFile: "Session_MH01_MH02_MH03_Mono"
+
+# The store file is created from the current session, if a file with the same name exists it is deleted
+#System.SaveAtlasToFile: "Session_MH01_MH02_MH03_Mono"
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+
+# If you use Kalibr for Camera-IMU extrinsic calibration, in order to run ORB-SLAM3 in Stereo-Inertial mode you need to set two matrices:
+
+# IMU.T_b_c1: this is the transformation from left camera frame to IMU frame (left camera pose w.r.t. IMU frame). In report from Kalibr it corresponds to T_ic:  (cam0 to imu0).
+# Stereo.T_c1_c2: this is the transformation from right camera to left camera (right camera pose w.r.t. left camera frame). To get this transformation, the Baseline (cam0 to cam1) from Kalibr should be inverted. Here assumed the left camera corresponds to cam0.
+
+File.version: "1.0"
+
+Camera.type: "PinHole"
+
+# Camera calibration and distortion parameters (OpenCV) 
+Camera1.fx: 605.128
+Camera1.fy: 604.974
+Camera1.cx: 520.453
+Camera1.cy: 393.878
+
+Camera1.k1: -9.19851288e-02
+Camera1.k2: 8.66983905e-02
+Camera1.p1: 2.48622790e-04
+Camera1.p2: 7.21565739e-04
+
+Camera2.fx: 6.04964966e+02
+Camera2.fy: 6.04625610e+02
+Camera2.cx: 5.16844666e+02
+Camera2.cy: 3.88209320e+02
+
+Camera2.k1: -9.58003029e-02
+Camera2.k2: 8.74120295e-02
+Camera2.p1: 2.08094658e-04
+Camera2.p2: -1.08567670e-04
+
+Camera.width: 1024
+Camera.height: 768
+
+Camera.newWidth: 600
+Camera.newHeight: 350
+
+# Camera frames per second 
+Camera.fps: 30
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
+
+Stereo.ThDepth: 60.0
+Stereo.T_c1_c2: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [0.9999151538394297, 0.010944366387568124, 0.007064415520341097, -0.159677148,
+         0.011091381600919704, -0.9997154593778474, -0.021118274908764795, -0.000771340623,
+         0.006831279269078886, 0.02119483723254448, -0.9997520255034413, -0.000198924507,
+         0.0, 0.0, 0.0, 1.0]
+
+# Transformation from camera to body-frame (imu)
+Tbc: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: f
+   data: [0.00236578, 0.99984034, -0.01771144,  0.067436,
+        -0.01890383, -0.01766361, -0.99966527, -0.022029,
+        -0.99981851,  0.0026998,   0.01885902, -0.078333,
+        0.0,0.0,0.0,1.0]
+
+# IMU noise
+IMU.NoiseGyro: 5.084312924828687e-05
+IMU.NoiseAcc: 0.0011501915187049582
+IMU.GyroWalk: 6.509823412408377e-07
+IMU.AccWalk: 3.729854069064516e-05
+IMU.Frequency: 200.0
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1000
+
+# ORB Extractor: Scale factor between levels in the scale pyramid 	
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid	
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast			
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#---------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500.0
+
+# dataset_name: calib_20220209
+# image_width: 1024
+# image_height: 768
+# camera_name: stereo_left_Flir_BFSU3
+# camera_matrix: !!opencv-matrix
+#   rows: 3
+#   cols: 3
+#   dt: f
+#   data: [ 6.05128601e+02, 0., 5.20453430e+02, 
+#           0., 6.04974060e+02, 3.93878479e+02, 
+#           0., 0., 1. ]
+# distortion_model: plumb_bob
+# distortion_coefficients: !!opencv-matrix
+#   rows: 1
+#   cols: 4
+#   dt: f
+#   data: [ -9.19851288e-02, 8.66983905e-02, 2.48622790e-04, 7.21565739e-04 ]
+# rectification_matrix: !!opencv-matrix
+#   rows: 3
+#   cols: 3
+#   dt: f
+#   data: [ 9.99833524e-01, -1.62732340e-02, 8.25512875e-03,
+#           1.63186900e-02, 9.99851882e-01, -5.46946190e-03, 
+#           -8.16490036e-03, 5.60326409e-03, 9.99950945e-01 ]
+# projection_matrix: !!opencv-matrix
+#   rows: 3
+#   cols: 4
+#   dt: f
+#   data: [ 6.04799866e+02, 0., 5.14155396e+02, 0., 
+#           0., 6.04799866e+02, 3.91754669e+02, 0., 
+#           0., 0., 1., 0. ]
+          
+# quaternion_stereo: !!opencv-matrix
+#   rows: 1
+#   cols: 4
+#   dt: f
+#   data: [ 1., 0., 0., 0. ] # qw, qx, qy, qz
+# translation_stereo: !!opencv-matrix
+#   rows: 1
+#   cols: 3
+#   dt: f
+#   data: [ 0., 0., 0. ]
+
+# # extrinsics from the sensor (reference) to bodyimu (target)
+# quaternion_sensor_bodyimu: !!opencv-matrix
+#   rows: 1
+#   cols: 4
+#   dt: f
+#   data: [0.500292, 0.490181, -0.508467, 0.500889]
+# translation_sensor_bodyimu: !!opencv-matrix
+#   rows: 1
+#   cols: 3
+#   dt: f
+#   data: [0.067436, -0.022029, -0.078333]
+# timeshift_sensor_bodyimu: 0.11942262945471108
