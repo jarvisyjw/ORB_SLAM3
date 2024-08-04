@@ -47,21 +47,23 @@ def process_file(filename, mode):
     vertex_lines = [line for line in lines if line.startswith("VERTEX")]
     edge_lines = [line for line in lines if line.startswith("EDGE")]
 
-    min_id = int(vertex_lines[0].split()[1])
-    max_id = int(vertex_lines[-1].split()[1])
-
+    # min_id = int(vertex_lines[0].split()[1])
+    # max_id = int(vertex_lines[-1].split()[1])
+    min_id = 0
+    max_id = 4540
     
     if mode == "slight-mix":
-        modify_edge_ids(edge_lines, min_id, max_id, 0.001, "slight")
+        modify_edge_ids(edge_lines, min_id, max_id, 0.05, "slight")
     elif mode == "med-mix":
-        modify_edge_ids(edge_lines, min_id, max_id, 0.005, "med")
+        modify_edge_ids(edge_lines, min_id, max_id, 0.1, "med")
     elif mode == "huge-mix":
-        modify_edge_ids(edge_lines, min_id, max_id, 0.005, "med")
-        modify_edge_ids(edge_lines, min_id, max_id, 0.001, "huge")
+        modify_edge_ids(edge_lines, min_id, max_id, 0.1, "med")
+        modify_edge_ids(edge_lines, min_id, max_id, 0.02, "huge")
     
     modified_lines = vertex_lines + edge_lines
-    write_file(f"modified_{filename}", modified_lines)
+    write_file(f"./data/kitti_00_vo+lc+hfp.g2o", modified_lines)
 
 # Example usage
 if __name__=="__main__":
-    process_file('grid3D.txt', 'med-mix')  # Change 'slight-mix' to 'med-mix' or 'huge-mix' as needed
+    process_file('./data/kitti_00.g2o', 'huge-mix')  # Change 'slight-mix' to 'med-mix' or 'huge-mix' as needed
+    
