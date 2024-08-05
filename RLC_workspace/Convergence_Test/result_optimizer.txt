@@ -1,0 +1,2 @@
+virtual bool g2o::SparseOptimizer::initializeOptimization(g2o::HyperGraph::VertexSet&, int): Attempt to initialize an empty graph
+virtual int g2o::SparseOptimizer::optimize(int, bool): 0 vertices to optimize, maybe forgot to call initializeOptimization()
