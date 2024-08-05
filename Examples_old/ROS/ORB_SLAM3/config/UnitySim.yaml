@@ -10,8 +10,8 @@
 #System.LoadAtlasFromFile: "Session_MH01_MH02_MH03_Mono"
 
 # The store file is created from the current session, if a file with the same name exists it is deleted
-#System.SaveAtlasToFile: "Session_MH01_MH02_MH03_Mono"
-
+System.SaveAtlasToFile: "Unity_noLC"
+# System.SaveAtlasToFile: "Unity_noLC.osa"
 #--------------------------------------------------------------------------------------------
 # Camera Parameters. Adjust them!
 #--------------------------------------------------------------------------------------------
@@ -82,4 +82,5 @@ Viewer.ViewpointY: -0.7
 Viewer.ViewpointZ: -1.8
 Viewer.ViewpointF: 500.0
 
-System.LoopClosing: 0
+# System.LoopClosing: 1
+System.loopClosing: 0

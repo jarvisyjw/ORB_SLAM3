@@ -542,7 +542,7 @@ void System::Shutdown()
 
     mpLocalMapper->RequestFinish();
     // mpLoopCloser->RequestFinish();
-    if (mpLocalMapper) mpLoopCloser->RequestFinish();
+    if (mpLoopCloser){mpLoopCloser->RequestFinish();}
 
     /*if(mpViewer)
     {
@@ -565,11 +565,12 @@ void System::Shutdown()
         }*/
         /*usleep(5000);
     }*/
-
+    cout << "save to file is " << !mStrSaveAtlasToFile.empty() << endl;
     if(!mStrSaveAtlasToFile.empty())
     {
         Verbose::PrintMess("Atlas saving to file " + mStrSaveAtlasToFile, Verbose::VERBOSITY_NORMAL);
         SaveAtlas(FileType::BINARY_FILE);
+        cout << "Atlas saved!" << endl;
     }
 
     /*if(mpViewer)

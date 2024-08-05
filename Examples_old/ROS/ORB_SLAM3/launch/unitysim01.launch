@@ -2,8 +2,8 @@
     <!-- Specify the path to the ORB-SLAM3 vocabulary and configuration files -->
     <arg name="voc_file" default="/home/jarvis/jw_ws/SLAM_ws/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
         <arg name="settings_file" default="$(find ORB_SLAM3)/config/UnitySim.yaml"/>
-            <arg name="kf_traj_file" default="$(find ORB_SLAM3)/output/traj/unitysim_traj.txt"/>
-                <arg name="bag_file" default="/home/jarvis/jw_ws/SLAM_ws/ORB_SLAM3/dataset/UnitySimulation.bag" />
+            <arg name="kf_traj_file" default="$(find ORB_SLAM3)/output/traj/unitysim_traj01.txt"/>
+                <arg name="bag_file" default="/home/jarvis/jw_ws/SLAM_ws/ORB_SLAM3/dataset/UnitySimulation_01.bag" />
 
     <param name="voc_file" value="$(arg voc_file)"/>
     <param name="settings_file" value="$(arg settings_file)"/>

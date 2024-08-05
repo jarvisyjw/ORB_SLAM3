@@ -89,16 +89,20 @@ int main(int argc, char **argv)
     ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
 
     ros::spin();
+    
+    cout << "ROS Node Stops!!! \n" << endl;
+    SLAM.SaveKeyFrameTrajectoryTUM(kf_traj_file);
 
     // Stop all threads
     SLAM.Shutdown();
+    // cout << "kf_traj_file: " << kf_traj_file << endl;
+    // cout << mStrSaveAtlasToFile << endl;
+    cout << "SHUTDOWN complete!!! \n" << endl;
 
     // Save keyframe trajectory
-    SLAM.SaveKeyFrameTrajectoryTUM(kf_traj_file);
-    // Save camera trajectory
+    // SLAM.SaveTrajectoryTUM(kf_traj_file);
 
     ros::shutdown();
-
     return 0;
 }
 
