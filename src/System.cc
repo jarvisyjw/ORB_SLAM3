@@ -210,7 +210,9 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
 
     //Initialize the Loop Closing thread and launch
     // mSensor!=MONOCULAR && mSensor!=IMU_MONOCULAR
-    bool bLoopClosing = static_cast<int>(fsSettings["System.loopClosing"]) != 0;
+    bool bLoopClosing = static_cast<int>(fsSettings["System.LoopClosing"]) != 0;
+    
+    std::cout << "Loop Closing: " << bLoopClosing << std::endl;
 
     if (bLoopClosing){
         cout << "Loop Closing activated!" << endl;
@@ -1224,6 +1226,45 @@ void System::SaveKeyFrameTrajectoryEuRoC(const string &filename, Map* pMap)
     }
     f.close();
 }*/
+
+// void System::SaveKeyFrameTrajectoryKITTI(const string &filename, Map* pMap)
+// {
+//     cout << endl << "Saving keyframe trajectory of map " << pMap->GetId() << " to " << filename << " ..." << endl;
+
+//     vector<KeyFrame*> vpKFs = pMap->GetAllKeyFrames();
+//     sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);
+
+//     // Transform all keyframes so that the first keyframe is at the origin.
+//     // After a loop closure the first keyframe might not be at the origin.
+//     ofstream f;
+//     f.open(filename.c_str());
+//     f << fixed;
+
+//     for(size_t i=0; i<vpKFs.size(); i++)
+//     {
+//         KeyFrame* pKF = vpKFs[i];
+
+//         if(!pKF || pKF->isBad())
+//             continue;
+//         if (mSensor == IMU_MONOCULAR || mSensor == IMU_STEREO || mSensor==IMU_RGBD)
+//         {
+//             Sophus::SE3f Twb = pKF->GetImuPose();
+//             Eigen::Quaternionf q = Twb.unit_quaternion();
+//             Eigen::Vector3f twb = Twb.translation();
+//             f << setprecision(6) << 1e9*pKF->mTimeStamp  << " " <<  setprecision(9) << twb(0) << " " << twb(1) << " " << twb(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
+
+//         }
+//         else
+//         {
+//             Sophus::SE3f Twc = pKF->GetPoseInverse();
+//             Eigen::Quaternionf q = Twc.unit_quaternion();
+//             Eigen::Vector3f t = Twc.translation();
+//             f << setprecision(6) << 1e9*pKF->mTimeStamp << " " <<  setprecision(9) << t(0) << " " << t(1) << " " << t(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
+//         }
+//     }
+//     f.close();
+// }
+
 
 void System::SaveTrajectoryKITTI(const string &filename)
 {

@@ -135,6 +135,16 @@ int main(int argc, char **argv)
 
   ros::spin();
 
+  cout << "ROS Node Stops!!! \n" << endl;
+  SLAM.SaveKeyFrameTrajectoryTUM(kf_traj_file);
+
+  // Stop all threads
+  SLAM.Shutdown();
+  // cout << "kf_traj_file: " << kf_traj_file << endl;
+  // cout << mStrSaveAtlasToFile << endl;
+  cout << "SHUTDOWN complete!!! \n" << endl;
+
+  ros::shutdown();
   return 0;
 }
 
